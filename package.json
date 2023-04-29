@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "tailwind-build": "npx tailwindcss -i ./input.css -o ./views/styles/output.css --watch",
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=production nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
