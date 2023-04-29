@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Lista de Contactos</title>
+</head>
+<body>
+    <nav id="navbar" class="fixed top-0 right-0 left-0 bg-slate-700 h-16">
+    </nav>
+
+    <div id="notification" class="fixed top-20 right-0 left-0"></div>
+
+    <div class="pt-16 flex flex-col items-center justify-center h-screen p-4 bg-slate-800">
+        
+        <div class="h-[90%] items-stretch bg-slate-700 w-full p-4 text-center rounded-lg shadow-md text-white lg:w-10/12">
+            <h1 class="font-bold text-3xl">Agenda</h1>
+
+            <form id="form" autocomplete="off" class="flex items-center justify-center gap-4 pt-4">
+                <div class="flex md:flex-row flex-col gap-4">
+                    <div>
+                        <label for="name_input">Nombre:</label>
+                        <input type="text" id="name_input" class="px-3 py-1 rounded-lg bg-slate-600 outline-white border-white border-2 border-opacity-50">
+                    </div>
+                    <div>
+                        <label for="number_input">Número:</label>
+                        <input type="text" id="number_input" class="px-3 py-1 rounded-lg bg-slate-600 outline-white border-white border-2 border-opacity-50">
+                    </div>
+                </div>
+                <button id="create_btn" disabled class="bg-green-600 p-2 rounded-xl disabled:opacity-50 hover:bg-green-500 hover:scale-110 transition ease-in-out">
+                    <img src="/images/add.svg" class="w-6 h-6" alt="crear contacto">
+                </button>
+            </form>
+            
+            <form id="form_list" class="md:h-2/3 h-[60%] overflow-auto my-8 bg-zinc-300 bg-opacity-5 text-start rounded-lg">
+                <ul id="list" class="flex flex-col gap-2 px-3">
+                </ul>
+            </form>
+        </div>
+    </div>
+    
+    <script src="/components/nav.js"></script>
+    <script type="module" src="index.js"></script>
+</body>
+</html>
