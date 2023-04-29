@@ -62,7 +62,7 @@ const navbar = document.querySelector('#navbar');
     } else {
         const token = tokenUrl.split('/')[0];
         await axios.get(`/api/resetPassword/${token}`);
-        navbar.remove();
+        // navbar.remove();
         container.innerHTML = `
         <form class="flex flex-col p-4 rounded-lg gap-4 bg-zinc-200 shadow-lg">
             <h1 class="text-lg">Escribe tu nueva contraseña</h1>
