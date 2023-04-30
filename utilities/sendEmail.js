@@ -21,7 +21,7 @@ const sendEmail = async (userName, userEmail, subjectEmail, htmlBody, url) => {
         Te dejo un enlace donde puedes <a href="${PAGE_URL}/${url}" style="color: black; font-weight: bolder;">${htmlBody}</a>. <br> 
         Saludos.
         </p>`, // html body
-    });
+    }); 
 };
 
 module.exports = sendEmail;

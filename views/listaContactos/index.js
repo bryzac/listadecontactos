@@ -12,12 +12,43 @@ let textNotification = '';
 let isNotificationTrue = '';
 const message =(bool, text) => {
     createNotification(bool, text);
-        setTimeout(() => {
-            notification.innerHTML = '';
-        }, 2000);
+    setTimeout(() => {
+        notification.innerHTML = '';
+    }, 2000);
 };
 
-
+(async () => {
+    try {
+        const { data } = await axios.get('/api/contacts', {
+            withCredentials: true
+        });
+        data.forEach(contact => {
+            const listItem = document.createElement('li');
+            listItem.id = contact.id;
+            listItem.classList.add('flex', 'flex-row', 'bg-slate-600', 'px-1', 'py-1', 'rounded-md', 'border-zinc-400', 'border-2', 'gap-2', 'justify-around');
+            listItem.innerHTML = `
+            <p class="flex items-center w-2/5 bg-slate-500 px-3 rounded-md text-lg font-medium">${contact.name}</p>
+            <p class="flex items-center w-2/5 bg-slate-500 px-3 rounded-md text-lg font-medium">${contact.number}</p>
+            <button class="bg-red-600 rounded-lg disabled:opacity-50 hover:bg-red-500 hover:scale-110 transition ease-in-out">
+            <img src="/images/trash.svg" class="w-6 h-6 m-1" alt="eliminar contacto">
+            </button>
+            <button class="bg-yellow-600 rounded-lg disabled:opacity-50 hover:bg-yellow-500 hover:scale-110 transition ease-in-out">
+            <img src="/images/edit.svg" class="w-6 h-6 m-1" alt="editar contacto">
+            </button>
+            `;
+            ul.append(listItem);
+        });
+        
+    } catch (error) {
+        console.log(error.response.status);
+        if (error.response.status === 401) {
+            textNotification = 'Debes iniciar sesión';
+            isNotificationTrue = true;
+            message(isNotificationTrue, textNotification);
+        }
+        window.location.pathname = '/login'
+    }
+})();
 
 // Regex validation
 const NAME_REGEX = /^[A-Z-ÁÉÍÓÚ\u00d1][a-zA-Z-ÿáéíóúÁÉÍÓÚ\u00f1\u00d1]+(\s*[A-Z-ÁÉÍÓÚ\u00d1][a-zA-Z-ÿáéíóúÁÉÍÓÚ\u00f1\u00d1]*)+(\s*[A-Z-ÁÉÍÓÚ\u00d1][a-zA-Z-ÿáéíóúÁÉÍÓÚ\u00f1\u00d1]*)?$/;
@@ -176,37 +207,3 @@ formList.addEventListener('submit', async e => {
     }
 });
 
-
-(async () => {
-    try {
-        const { data } = await axios.get('/api/contacts', {
-            withCredentials: true
-        });
-
-        data.forEach(contact => {
-            const listItem = document.createElement('li');
-            listItem.id = contact.id;
-            listItem.classList.add('flex', 'flex-row', 'bg-slate-600', 'px-1', 'py-1', 'rounded-md', 'border-zinc-400', 'border-2', 'gap-2', 'justify-around');
-            listItem.innerHTML = `
-            <p class="flex items-center w-2/5 bg-slate-500 px-3 rounded-md text-lg font-medium">${contact.name}</p>
-            <p class="flex items-center w-2/5 bg-slate-500 px-3 rounded-md text-lg font-medium">${contact.number}</p>
-            <button class="bg-red-600 rounded-lg disabled:opacity-50 hover:bg-red-500 hover:scale-110 transition ease-in-out">
-                <img src="/images/trash.svg" class="w-6 h-6 m-1" alt="eliminar contacto">
-            </button>
-            <button class="bg-yellow-600 rounded-lg disabled:opacity-50 hover:bg-yellow-500 hover:scale-110 transition ease-in-out">
-                <img src="/images/edit.svg" class="w-6 h-6 m-1" alt="editar contacto">
-            </button>
-            `;
-            ul.append(listItem);
-        });
-        
-    } catch (error) {
-        console.log(error.response.status);
-        if (error.response.status === 401) {
-            textNotification = 'Debes iniciar sesión';
-            isNotificationTrue = true;
-            message(isNotificationTrue, textNotification);
-        }
-        window.location.pathname = '/login/'
-    }
-})();

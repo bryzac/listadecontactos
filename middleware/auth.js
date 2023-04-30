@@ -5,6 +5,7 @@ const userExtractor = async (request, response, next) => {
     try {
         const token = request.cookies?.accessToken;
         if (!token) {
+            await axios.get('/api/logout');
             return response.sendStatus(401);
         }
         

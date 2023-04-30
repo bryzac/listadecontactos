@@ -81,6 +81,7 @@ form.addEventListener('submit', async e => {
         validation(emailInput, false);
         validation(passwordInput, false);
         validation(matchInput, false);
+        formBtn.disabled = true;
     } catch (error) {
         createNotification(true, error.response.data.error);
         setTimeout(() => {

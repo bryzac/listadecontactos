@@ -1,22 +1,51 @@
 const contactRouter = require('express').Router();
 const User = require('../models/user');
 const Contact = require('../models/contact');
+const { default: axios } = require('axios');
 
 contactRouter.get('/', async (request, response) => {
     const cookies = request.cookies;
+    const user = request.user;
+    console.log(cookies?.accessToken);
     if (!cookies?.accessToken) {
         await axios.get('/api/logout');
-        window.location.pathname = '/login';
+        // window.location.pathname = '/login';
         return response.sendStatus(401);
+    } else if (cookies?.accessToken) {
+        const contacts = await Contact.find({ user: user.id });
+        console.log('arepa');
+        return response.status(200).json(contacts);
     }
 });
 
+// contactRouter.get('/', async (request, response) => {
+//     const cookies = request.cookies;
+//     const user = request.user;
 
-contactRouter.get('/', async (request, response) => {
-    const user = request.user;
-    const contacts = await Contact.find({ user: user.id });
-    return response.status(200).json(contacts);
-});
+//     if (!cookies?.accessToken) {
+//         await axios.get('/api/logout');
+//         window.location.pathname = '/login';
+//         return response.sendStatus(401);
+//     }
+    
+//     const contacts = await Contact.find({ user: user.id });
+//     console.log('Arepa');
+//     // return response.status(200).json(contacts);
+// });
+
+
+// contactRouter.get('/', async (request, response) => {
+//     const cookies = request.cookies;
+//     if (!cookies?.accessToken) {
+//         await axios.get('/api/logout');
+//         window.location.pathname = '/login';
+//         return response.sendStatus(401);
+//     }
+    
+//     const user = request.user;
+//     const contacts = await Contact.find({ user: user.id });
+//     return response.status(200).json(contacts);
+// });
 
 
 contactRouter.post('/', async (request, response) => {
