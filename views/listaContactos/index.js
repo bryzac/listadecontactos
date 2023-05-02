@@ -19,6 +19,8 @@ const message =(bool, text) => {
 
 (async () => {
     try {
+        // await axios.get('/api/conchale');
+        // console.log('Arepa');
         const { data } = await axios.get('/api/contacts', {
             withCredentials: true
         });
@@ -40,6 +42,7 @@ const message =(bool, text) => {
         });
         
     } catch (error) {
+        console.log(error);
         console.log(error.response.status);
         if (error.response.status === 401) {
             textNotification = 'Debes iniciar sesión';
@@ -57,37 +60,37 @@ const NUMBER_REGEX = /^[0-9]{6,16}$/;
 // Validation
 let nameValidation = false;
 let numberValidation = false;
-const validation = (input, regexValidation) => {
-    createBtn.disabled = nameValidation && numberValidation ? false : true;
+const validation = (input, regexValidation, btn) => {
+    btn.disabled = nameValidation && numberValidation ? false : true;
 
     if (input.value === '') {
-        input.classList.remove('outline-red-700', 'outline-green-700', 'outline');
+        input.classList.remove('outline-red-700', 'outline-green-700', 'outline', 'outline-yellow-600', 'border-yellow-600');
         input.classList.add('focus:outline-slate-700', 'outline-4');
     } else if (regexValidation) {
-        input.classList.remove('focus:outline-slate-700', 'outline-red-700');
+        input.classList.remove('focus:outline-slate-700', 'outline-red-700', 'outline-yellow-600', 'border-yellow-600');
         input.classList.add('outline-green-700', 'outline-4', 'outline');
     } else {
-        input.classList.remove('focus:outline-slate-700', 'outline-green-700');
+        input.classList.remove('focus:outline-slate-700', 'outline-green-700', 'outline-yellow-600', 'border-yellow-600');
         input.classList.add('outline-red-700', 'outline-4', 'outline');
     }
 };
 
 nameInput.addEventListener('input', e => {
     nameValidation = NAME_REGEX.test(e.target.value);
-    validation(nameInput, nameValidation);
+    validation(nameInput, nameValidation, createBtn);
 });
 
 numberInput.addEventListener('input', e => {
     numberValidation = NUMBER_REGEX.test(e.target.value);
-    validation(numberInput, numberValidation);
+    validation(numberInput, numberValidation, createBtn);
 });
 
 // Add
 form.addEventListener('submit', async e => {
     e.preventDefault();
     if (!nameValidation || !numberValidation) {
-        validation(nameInput, nameValidation);
-        validation(numberInput, numberValidation);
+        validation(nameInput, nameValidation, createBtn);
+        validation(numberInput, numberValidation, createBtn);
     }
 
     const { data } = await axios.post('/api/contacts', { name: nameInput.value, number: numberInput.value });
@@ -116,9 +119,25 @@ form.addEventListener('submit', async e => {
     createBtn.disabled = true;
     nameValidation = false;
     numberValidation = false;
-    validation(nameInput, nameValidation);
-    validation(numberInput, numberValidation);
+    validation(nameInput, nameValidation, createBtn);
+    validation(numberInput, numberValidation, createBtn);
 });
+
+
+const editValidation = (name, number, btn) => {
+    nameValidation = true;
+    numberValidation = true;
+    name.addEventListener('input', e => {
+        nameValidation = NAME_REGEX.test(e.target.value);
+        validation(name, nameValidation, btn);
+    });
+    
+    number.addEventListener('input', e => {
+        numberValidation = NUMBER_REGEX.test(e.target.value);
+        validation(number, numberValidation, btn);
+    });
+};
+
 
 
 
@@ -151,12 +170,17 @@ formList.addEventListener('submit', async e => {
                 <img src="/images/cancel.svg" class="w-6 h-6 m-1" alt="cancelar">
             </button>
         `;
+        const nameEdit = editable.children[0];
+        const numberEdit = editable.children[1];
+        const saveBtn = editable.children[2];
+        editValidation(nameEdit, numberEdit, saveBtn);
+        
     };
 
     // Save
     if (e.submitter.children[0].alt === 'guardar') {
-        const name = e.submitter.parentElement.children[0].value;
-        const number = e.submitter.parentElement.children[1].value;
+        const name = e.submitter.parentElement.children[0];
+        const number = e.submitter.parentElement.children[1];
         const editable = e.submitter.parentElement;
 
         if (e.submitter.parentElement.children[0].value === '') {
@@ -171,11 +195,11 @@ formList.addEventListener('submit', async e => {
             message(isNotificationTrue, textNotification);
             return
         };
-
-        await axios.patch(`/api/contacts/${editable.id}`, { name: name, number: number });
+        
+        await axios.patch(`/api/contacts/${editable.id}`, { name: name.value, number: number.value });
         editable.innerHTML = `
-        <p class="flex items-center w-2/5 bg-slate-500 px-3 rounded-md text-lg font-medium">${name}</p>
-        <p class="flex items-center w-2/5 bg-slate-500 px-3 rounded-md text-lg font-medium">${number}</p>
+        <p class="flex items-center w-2/5 bg-slate-500 px-3 rounded-md text-lg font-medium">${name.value}</p>
+        <p class="flex items-center w-2/5 bg-slate-500 px-3 rounded-md text-lg font-medium">${number.value}</p>
         <button class="bg-red-600 rounded-lg disabled:opacity-50 hover:bg-red-500 hover:scale-110 transition ease-in-out">
             <img src="/images/trash.svg" class="w-6 h-6 m-1" alt="eliminar contacto">
         </button>

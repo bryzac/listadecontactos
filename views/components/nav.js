@@ -130,7 +130,7 @@ const createNavContactos = () => {
     `
 };
 
-if (window.location.pathname === '/' || window.location.pathname === '/resetPassword/') {
+if (window.location.pathname === '/') {
     createNavHome();
 } else if (window.location.pathname === '/signup/') {
     createNavSignup();
