@@ -19,8 +19,6 @@ const message =(bool, text) => {
 
 (async () => {
     try {
-        // await axios.get('/api/conchale');
-        // console.log('Arepa');
         const { data } = await axios.get('/api/contacts');
         data.forEach(contact => {
             const listItem = document.createElement('li');

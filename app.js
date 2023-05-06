@@ -14,7 +14,6 @@ const contactRouter = require('./controllers/contacts');
 const { userExtractor } = require('./middleware/auth');
 const logoutRouter = require('./controllers/logout');
 const { MONGO_URI } = require('./config');
-const conchaleRouter = require('./controllers/conchale');
 
 (async () => {
     try {
@@ -50,7 +49,5 @@ app.use('/api/login', loginRouter);
 app.use('/api/logout', logoutRouter);
 app.use('/api/resetPassword', resetPasswordRouter);
 app.use('/api/contacts', userExtractor, contactRouter);
-
-app.use('/api/conchale', userExtractor, conchaleRouter);
 
 module.exports = app;
