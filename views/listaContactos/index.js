@@ -21,9 +21,7 @@ const message =(bool, text) => {
     try {
         // await axios.get('/api/conchale');
         // console.log('Arepa');
-        const { data } = await axios.get('/api/contacts', {
-            withCredentials: true
-        });
+        const { data } = await axios.get('/api/contacts');
         data.forEach(contact => {
             const listItem = document.createElement('li');
             listItem.id = contact.id;
@@ -159,6 +157,7 @@ formList.addEventListener('submit', async e => {
     if (e.submitter.children[0].alt === 'editar contacto') {
         const name = e.submitter.parentElement.children[0].textContent;
         const number = e.submitter.parentElement.children[1].textContent;
+        console.log(e.submitter.parentElement.id);
         const editable = e.submitter.parentElement;
         editable.innerHTML = `
             <input type="text" placeholder="${name}" value="${name}" class="text-black w-2/5 px-3 rounded-lg bg-slate-100 outline-yellow-600 border-yellow-600 border-2 font-semibold">
@@ -182,6 +181,7 @@ formList.addEventListener('submit', async e => {
         const name = e.submitter.parentElement.children[0];
         const number = e.submitter.parentElement.children[1];
         const editable = e.submitter.parentElement;
+        console.log(e.submitter.parentElement.id);
 
         if (e.submitter.parentElement.children[0].value === '') {
             textNotification = 'El nombre no puede estar vacío';
