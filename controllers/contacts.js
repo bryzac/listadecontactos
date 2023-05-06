@@ -12,16 +12,7 @@ contactRouter.get('/', async (request, response) => {
     const user = request.user;
     const contacts = await Contact.find({ user: user.id });
     return response.status(200).json(contacts);
-    // return response
 });
-
-
-// contactRouter.get('/', async (request, response) => {
-//     const user = request.user;
-//     const contacts = await Contact.find({ user: user.id });
-//     return response.status(200).json(contacts);
-// });
-
 
 contactRouter.post('/', async (request, response) => {
     const user = request.user;
