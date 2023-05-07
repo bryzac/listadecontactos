@@ -3,12 +3,12 @@ const User = require('../models/user');
 const Contact = require('../models/contact');
 
 contactRouter.get('/', async (request, response) => {
-    // const cookies = request.cookies;
-    // if (!cookies?.accessToken) {
-    //     await axios.get('/api/logout');
-    //     window.location.pathname = '/login';
-    //     return response.sendStatus(401);
-    // }
+    const cookies = request.cookies;
+    if (!cookies?.accessToken) {
+        await axios.get('/api/logout');
+        window.location.pathname = '/login';
+        return response.sendStatus(401);
+    }
     const user = request.user;
     const contacts = await Contact.find({ user: user.id });
     return response.status(200).json(contacts);
